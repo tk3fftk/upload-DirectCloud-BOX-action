@@ -6,12 +6,23 @@ require('./sourcemap-register.js');module.exports =
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __nccwpck_require__) => {
 
 const core = __nccwpck_require__(186);
-const wait = __nccwpck_require__(258);
-
+const endpoint = 'https://api.directcloud.jp/openapi';
+const tokenPath = '/jauth/token?lang=eng'
 
 // most @actions toolkit packages have async methods
 async function run() {
   try {
+    if (!process.env.DIRECTCLOUDBOX_SERVICE)
+      throw new Error('Please specify DIRECTCLOUDBOX_SERVICE env')
+    if (!process.env.DIRECTCLOUDBOX_SERVICE_KEY)
+      throw new Error('Please specify DIRECTCLOUDBOX_SERVICE_KEY env')
+    if (!process.env.DIRECTCLOUDBOX_CODE)
+      throw new Error('Please specify DIRECTCLOUDBOX_CODE env')
+    if (!process.env.DIRECTCLOUDBOX_ID)
+      throw new Error('Please specify DIRECTCLOUDBOX_ID env')
+    if (!process.env.DIRECTCLOUDBOX_PASSWORD)
+      throw new Error('Please specify DIRECTCLOUDBOX_PASSWORD env')
+
     const ms = core.getInput('milliseconds');
     core.info(`Waiting ${ms} milliseconds ...`);
 
@@ -420,23 +431,6 @@ function toCommandValue(input) {
 }
 exports.toCommandValue = toCommandValue;
 //# sourceMappingURL=utils.js.map
-
-/***/ }),
-
-/***/ 258:
-/***/ ((module) => {
-
-let wait = function (milliseconds) {
-  return new Promise((resolve) => {
-    if (typeof milliseconds !== 'number') {
-      throw new Error('milliseconds not a number');
-    }
-    setTimeout(() => resolve("done!"), milliseconds)
-  });
-};
-
-module.exports = wait;
-
 
 /***/ }),
 
