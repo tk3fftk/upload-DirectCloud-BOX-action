@@ -22,11 +22,11 @@
   "author": "tk3fftk",
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "^1.2.5",
+    "@actions/core": "^1.5.0",
     "undici": "^4.4.5"
   },
   "devDependencies": {
-    "@vercel/ncc": "^0.27.0",
+    "@vercel/ncc": "^0.29.2",
     "eslint": "^7.4.0",
     "jest": "^26.6.3"
   }
