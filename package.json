@@ -22,7 +22,7 @@
   "author": "tk3fftk",
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "^1.2.5",
+    "@actions/core": "^1.5.0",
     "undici": "^4.4.4"
   },
   "devDependencies": {
