@@ -1,4 +1,4 @@
-name: "lint"
+name: "ci"
 on:
   pull_request:
   push:
@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: nom ci
+      - run: npm ci
       - run: node index.js
         env:
           DIRECTCLOUDBOX_SERVICE: ${{ secrets.DIRECTCLOUDBOX_SERVICE }}
@@ -24,5 +24,5 @@ jobs:
           DIRECTCLOUDBOX_CODE: ${{ secrets.CODE }}
           DIRECTCLOUDBOX_ID: ${{ secrets.DIRECTCLOUDBOX_ID }}
           DIRECTCLOUDBOX_PASSWORD: ${{ secrets.DIRECTCLOUDBOX_PASSWORD }}
-          DIRECTCLOUDBOX_NDOE: "1"
+          DIRECTCLOUDBOX_NODE: "1"
           DIRECTCLOUDBOX_FILE_PATH: "index.js"
