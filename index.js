@@ -137,7 +137,7 @@ async function run() {
   try {
     const undefinedEnv = [];
     requireEnvs.forEach((env) => {
-      if (process.env[env] === undefined) {
+      if (process.env[env] === undefined || process.env[env] === '') {
         undefinedEnv.push(env);
       }
     });
