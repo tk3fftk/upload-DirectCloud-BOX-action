@@ -8915,14 +8915,6 @@ module.exports = require("fs");
 
 /***/ }),
 
-/***/ 9225:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("fs/promises");
-
-/***/ }),
-
 /***/ 8605:
 /***/ ((module) => {
 
@@ -9042,7 +9034,7 @@ var __webpack_exports__ = {};
 const axios = __nccwpck_require__(6545);
 const core = __nccwpck_require__(2186);
 const filetype = __nccwpck_require__(4930);
-const fs = __nccwpck_require__(9225);
+const fs = __nccwpck_require__(5747).promises;
 const FormData = __nccwpck_require__(4334);
 const path = __nccwpck_require__(5622);
 
