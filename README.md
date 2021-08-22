@@ -5,7 +5,7 @@
 ## Usage
 
 ```yaml
-name: CI
+name: upload
 
 on:
   push:
