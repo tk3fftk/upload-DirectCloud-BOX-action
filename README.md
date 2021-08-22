@@ -1,6 +1,6 @@
 # Upload DirectCloud-Box
 
-DirectCloud-BOX の API を利用し、GitHub Actions のワークフロー内からファイルをアップロードする JavaScript Action です。
+[DirectCloud-BOX](https://directcloud.jp/freeplan) の [API](https://directcloud.jp/api_reference) を利用し、GitHub Actions のワークフロー内からファイルをアップロードする JavaScript Action です。
 
 ## Usage
 
