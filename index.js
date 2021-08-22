@@ -19,7 +19,8 @@ const requireEnvs = [
 ];
 const tokenPath = '/openapi/jauth/token?lang=eng';
 const tokenParams = ['service', 'service_key', 'code', 'id', 'password'];
-const uploadPath = `/openapp/v1/files/upload/${process.env.DIRECTCLOUDBOX_NODE}?lang=eng`;
+const uploadPath = '/openapp/v1/files/upload/';
+const createNodePath = '/openapp/v1/folders/create/';
 
 async function fetchAccessToken() {
   const data = new FormData();
@@ -43,8 +44,66 @@ async function fetchAccessToken() {
   return { cookie, access_token };
 }
 
-async function uploadFile(cookie, accessToken) {
-  const filepath = process.env.DIRECTCLOUDBOX_FILE_PATH;
+async function createNode(cookie, accessToken, node, newNodeName) {
+  const data = new FormData();
+  data.append('name', newNodeName);
+  const options = {
+    headers: {
+      Cookie: cookie.reduce((acc, cur) => `${acc}; ${cur.split(';')[0]}`, ''),
+      access_token: accessToken,
+      ...data.getHeaders(),
+    },
+  };
+
+  const response = await axios.post(
+    `${endpoint}${createNodePath}${node}?lang=eng`,
+    data,
+    options
+  );
+  const { success, all } = response.data;
+  const newNode = response.data.node;
+  if (success) {
+    core.info(`${newNodeName} is successfully created (id: ${newNode})`);
+  } else {
+    throw new Error(`Failed to create a new node "${newNodeName}": ${all}`);
+  }
+  return newNode;
+}
+
+async function uploadFiles(cookie, accessToken, node, filePath) {
+  let files;
+  try {
+    files = await fs.readdir(filePath, { withFileTypes: true });
+  } catch (error) {
+    if (error.code === 'ENOTDIR') {
+      await uploadFile(cookie, accessToken, node, filePath);
+    } else {
+      core.warning(`${filePath} could not be uploaded: ${error.message}`);
+    }
+    return;
+  }
+
+  for (const f of files) {
+    if (f.isDirectory()) {
+      try {
+        const newNode = await createNode(cookie, accessToken, node, f.name);
+        await uploadFiles(
+          cookie,
+          accessToken,
+          newNode,
+          path.join(filePath, f.name)
+        );
+      } catch (error) {
+        // continue uploading other files when dir creation is failed
+        core.warning(error.message);
+      }
+    } else {
+      await uploadFiles(cookie, accessToken, node, path.join(filePath, f.name));
+    }
+  }
+}
+
+async function uploadFile(cookie, accessToken, node, filepath) {
   const buffer = await fs.readFile(filepath);
   const ft = await filetype.fromFile(filepath);
   let mime = ft?.mime ? ft.mime : 'text/plain';
@@ -61,10 +120,14 @@ async function uploadFile(cookie, accessToken) {
     },
   };
 
-  const response = await axios.post(endpoint + uploadPath, data, options);
+  const response = await axios.post(
+    `${endpoint}${uploadPath}${node}?lang=eng`,
+    data,
+    options
+  );
   const { success } = response.data;
   if (success) {
-    core.info(`${path.basename(filepath)} is successfully uploaded`);
+    core.info(`${filepath} is successfully uploaded`);
   } else {
     throw new Error('Failed to upload: ' + filepath);
   }
@@ -85,7 +148,12 @@ async function run() {
     }
 
     const { cookie, access_token } = await fetchAccessToken();
-    await uploadFile(cookie, access_token);
+    await uploadFiles(
+      cookie,
+      access_token,
+      process.env.DIRECTCLOUDBOX_NODE,
+      path.join(__dirname, process.env.DIRECTCLOUDBOX_FILE_PATH)
+    );
   } catch (error) {
     core.setFailed(error.message);
   }
