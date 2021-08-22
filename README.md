@@ -22,7 +22,7 @@ jobs:
       DIRECTCLOUDBOX_ID: ${{ secrets.DIRECTCLOUDBOX_ID }}
       DIRECTCLOUDBOX_PASSWORD: ${{ secrets.DIRECTCLOUDBOX_PASSWORD }}
       DIRECTCLOUDBOX_NODE: '1' # "1" means "My Box" folder
-      DIRECTCLOUDBOX_FILE_PATH: 'hoge' # set a file or directory
+      DIRECTCLOUDBOX_FILE_PATH: 'README.md' # set a file or directory
     steps:
       - uses: actions/checkout@v2
       - uses: tk3fftk/upload-DirectCloud-BOX-action@v1.0
