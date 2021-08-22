@@ -9145,7 +9145,7 @@ async function uploadFiles(cookie, accessToken, node, filePath) {
 async function uploadFile(cookie, accessToken, node, filepath) {
   const buffer = await fs.readFile(filepath);
   const ft = await filetype.fromFile(filepath);
-  let mime = ft?.mime ? ft.mime : 'text/plain';
+  let mime = ft && ft.mime ? ft.mime : 'text/plain';
   const data = new FormData();
   data.append('Filedata', buffer, {
     filename: path.basename(filepath),
@@ -9176,7 +9176,7 @@ async function run() {
   try {
     const undefinedEnv = [];
     requireEnvs.forEach((env) => {
-      if (process.env[env] === undefined) {
+      if (process.env[env] === undefined || process.env[env] === '') {
         undefinedEnv.push(env);
       }
     });
