@@ -9183,7 +9183,7 @@ async function run() {
       cookie,
       access_token,
       process.env.DIRECTCLOUDBOX_NODE,
-      path.join(__dirname, process.env.DIRECTCLOUDBOX_FILE_PATH)
+      path.join('./', process.env.DIRECTCLOUDBOX_FILE_PATH)
     );
   } catch (error) {
     core.setFailed(error.message);
